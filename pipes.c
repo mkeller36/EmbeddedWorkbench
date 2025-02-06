@@ -11,8 +11,25 @@ int main(int argc, char* argv[]){
         printf("ERROR: pipe \n");
         return 1;
     }
+
+    int id = fork();
+    if(0 == id){
+        /* Child process */
+        /* Close end of pipe you are not using */
+        close(fd[0]);
+        int x;
+        printf("Input a number\n");
+        scanf("%d", &x);
+        /* create space for x in pipe and write it there */
+        write(fd[1], &x , sizeof(int));
+        close(fd[1]);
+    }
     else{
-        int id = fork();
+        close(fd[1]);
+        int y; 
+        read(fd[0],&y,sizeof(int));
+        close(fd[0]);
+        printf("From Child process: %d\n", y);
     }
     return 0;
 }
