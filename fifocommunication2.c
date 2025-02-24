@@ -10,26 +10,24 @@
 
 int main(int argc, char* argv[]){
     int arr[5];
-    srand(time(NULL));
-
-
-    for(int i = 0; i < 5; i++){
-        arr[i] = rand() % 100;
-    }
-    
-
-    int fd = open("sum", O_WRONLY);
+    int fd = open("sum", O_RDONLY);
     if(fd == -1){
         return 1;
     }
-    
-    for(int i =0; i < 5; i++){
-        if(write(fd,&arr[i], sizeof(int)) == -1){
+
+    for(int i = 0; i < 5; i++){
+        if(read(fd,&arr[i], sizeof(int)) == -1){
             return 2;
         }
-        printf("wrote %d\n", arr[i]);
+        printf("Recevied %d \n", arr[i]);
     }
     close(fd);
+
+    int sum = 0;
+    for(i = 0; i < 5; i++){
+        sum += arr[i];
+    }
+    printf("Sum is %d\n",sum);
 
     return 0;
 }
